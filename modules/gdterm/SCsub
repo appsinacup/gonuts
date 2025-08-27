@@ -45,7 +45,7 @@ if env_gdterm["platform"] == "windows":
                 "_AMD64_",
             ]
         )
-    elif env["arch"] == "x86":
+    elif env["arch"] == "x86_32" or env["arch"] == "x86":
         windows_defines.extend(
             [
                 "_X86_",
@@ -59,6 +59,13 @@ if env_gdterm["platform"] == "windows":
                 "WIN64",
                 "_ARM64_",
                 "_M_ARM64",
+            ]
+        )
+    elif env["arch"] == "arm32":
+        windows_defines.extend(
+            [
+                "_ARM_",
+                "WIN32",
             ]
         )
     else:
