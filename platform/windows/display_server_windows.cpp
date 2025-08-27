@@ -2469,6 +2469,21 @@ void DisplayServerWindows::window_set_mode(WindowMode p_mode, WindowID p_window)
 		}
 	}
 
+	if ((wd.maximized || wd.was_maximized_pre_fs) && wd.borderless && p_mode != WINDOW_MODE_MINIMIZED && p_mode != WINDOW_MODE_FULLSCREEN && p_mode != WINDOW_MODE_EXCLUSIVE_FULLSCREEN) {
+		RECT rect;
+		if (wd.pre_fs_valid) {
+			rect = wd.pre_fs_rect;
+		} else {
+			rect.left = 0;
+			rect.right = wd.width;
+			rect.top = 0;
+			rect.bottom = wd.height;
+		}
+
+		ShowWindow(wd.hWnd, SW_RESTORE);
+		MoveWindow(wd.hWnd, rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top, TRUE);
+	}
+
 	if (p_mode == WINDOW_MODE_WINDOWED) {
 		ShowWindow(wd.hWnd, SW_NORMAL);
 		wd.maximized = false;
@@ -2482,6 +2497,11 @@ void DisplayServerWindows::window_set_mode(WindowMode p_mode, WindowID p_window)
 	}
 
 	if (p_mode == WINDOW_MODE_MAXIMIZED && wd.borderless) {
+		if (!was_fullscreen && !(wd.maximized && wd.borderless)) {
+			// Save non-fullscreen rect before entering fullscreen.
+			GetWindowRect(wd.hWnd, &wd.pre_fs_rect);
+			wd.pre_fs_valid = true;
+		}
 		ShowWindow(wd.hWnd, SW_NORMAL);
 		wd.maximized = true;
 		wd.minimized = false;
@@ -2515,7 +2535,7 @@ void DisplayServerWindows::window_set_mode(WindowMode p_mode, WindowID p_window)
 		// Save previous maximized stare.
 		wd.was_maximized_pre_fs = wd.maximized;
 
-		if (!was_fullscreen) {
+		if (!was_fullscreen && !(wd.maximized && wd.borderless)) {
 			// Save non-fullscreen rect before entering fullscreen.
 			GetWindowRect(wd.hWnd, &wd.pre_fs_rect);
 			wd.pre_fs_valid = true;
@@ -7188,10 +7208,8 @@ DisplayServerWindows::DisplayServerWindows(const String &p_rendering_driver, Win
 	}
 
 #ifdef SDL_ENABLED
-	joypad_sdl = memnew(JoypadSDL());
-	if (joypad_sdl->initialize() == OK) {
-		joypad_sdl->setup_sdl_helper_window(windows[MAIN_WINDOW_ID].hWnd);
-	} else {
+	joypad_sdl = memnew(JoypadSDL(windows[MAIN_WINDOW_ID].hWnd));
+	if (joypad_sdl->initialize() != OK) {
 		ERR_PRINT("Couldn't initialize SDL joypad input driver.");
 		memdelete(joypad_sdl);
 		joypad_sdl = nullptr;

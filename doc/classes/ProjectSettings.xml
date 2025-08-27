@@ -553,7 +553,7 @@
 			When set to [code]warn[/code] or [code]error[/code], produces a warning or an error respectively when a static inferred type uses a [Variant] as initial value, which makes the static type to also be Variant.
 		</member>
 		<member name="debug/gdscript/warnings/inferred_declaration" type="int" setter="" getter="" default="0">
-			When set to [code]warn[/code] or [code]error[/code], produces a warning or an error respectively when a variable, constant, or parameter has an implicitly inferred static type.
+			When set to [code]warn[/code] or [code]error[/code], produces a warning or an error respectively when a variable, constant, or parameter has an implicitly inferred static type. In GDScript, type inference is performed by declaring a variable with [code]:=[/code] instead of [code]=[/code] and leaving out the type specifier. For example, [code]var x := 1[/code] will [i]infer[/i] the [int] type, while [code]var x: int = 1[/code] explicitly declares the variable as [int].
 			[b]Note:[/b] This warning is recommended [i]in addition[/i] to [member debug/gdscript/warnings/untyped_declaration] if you want to always specify the type explicitly. Having [code]INFERRED_DECLARATION[/code] warning level higher than [code]UNTYPED_DECLARATION[/code] warning level makes little sense and is not recommended.
 		</member>
 		<member name="debug/gdscript/warnings/int_as_enum_without_cast" type="int" setter="" getter="" default="1">
@@ -3405,7 +3405,7 @@
 			The ratio of [WorkerThreadPool]'s threads that will be reserved for low-priority tasks. For example, if 10 threads are available and this value is set to [code]0.3[/code], 3 of the worker threads will be reserved for low-priority tasks. The actual value won't exceed the number of CPU cores minus one, and if possible, at least one worker thread will be dedicated to low-priority tasks.
 		</member>
 		<member name="threading/worker_pool/max_threads" type="int" setter="" getter="" default="-1">
-			Maximum number of threads to be used by [WorkerThreadPool]. Value of [code]0[/code] or less means [code]1[/code] on Web, or a number of [i]logical[/i] CPU cores available on other platforms (see [method OS.get_processor_count]).
+			Maximum number of threads to be used by [WorkerThreadPool]. Value of [code]-1[/code] means [code]1[/code] on Web, or a number of [i]logical[/i] CPU cores available on other platforms (see [method OS.get_processor_count]).
 		</member>
 		<member name="xr/openxr/binding_modifiers/analog_threshold" type="bool" setter="" getter="" default="false">
 			If [code]true[/code], enables the analog threshold binding modifier if supported by the XR runtime.
