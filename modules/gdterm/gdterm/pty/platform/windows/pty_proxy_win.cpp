@@ -332,7 +332,7 @@ HRESULT CreatePseudoConsoleAndPipes(HPCON *phPC, HANDLE *phPipeIn, HANDLE *phPip
 }
 
 void PtyProxyWin::_init_startup_info() {
-	size_t attrListSize{};
+	SIZE_T attrListSize{};
 
 	_startup_info.StartupInfo.cb = sizeof(STARTUPINFOEX);
 
