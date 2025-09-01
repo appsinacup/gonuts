@@ -1,6 +1,11 @@
 def can_build(env, platform):
-    env.module_add_dependencies("godot_ide", ["godot_wry"], True)
-    return True
+    # Only build this module for editor builds
+    target = env.get("target", "")
+    print(f"GodotIDE can_build check: target={target}, platform={platform}")
+    if target == "editor":
+        env.module_add_dependencies("godot_ide", ["godot_wry"], True)
+        return True
+    return False
 
 
 def configure(env):

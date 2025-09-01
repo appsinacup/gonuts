@@ -150,8 +150,6 @@ void GodotIDEPlugin::_update_url_from_settings() {
 }
 
 void GodotIDEPlugin::_start_code_tunnel() {
-	print_line("Starting VS Code tunnel...");
-
 #ifdef TOOLS_ENABLED
 	// Get the terminal plugin singleton
 	TerminalPlugin *terminal_plugin = TerminalPlugin::get_singleton();
@@ -165,9 +163,7 @@ void GodotIDEPlugin::_start_code_tunnel() {
 
 	bool success = terminal_plugin->run_command_in_tab(1, "code tunnel");
 
-	if (success) {
-		print_line("VS Code tunnel command sent to terminal successfully");
-	} else {
+	if (!success) {
 		ERR_PRINT("Failed to run VS Code tunnel command in terminal");
 	}
 #else

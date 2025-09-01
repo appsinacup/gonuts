@@ -406,16 +406,13 @@ void TerminalPlugin::_add_terminal_tab(const String &p_name, const TerminalType 
 }
 
 TerminalPlugin::TerminalPlugin() {
-	print_line("TerminalPlugin::TerminalPlugin() - Creating terminal plugin");
 	singleton = this;
-	print_line("TerminalPlugin::TerminalPlugin() - Singleton set");
 	_create_ui();
 
 	if (!available_terminals.is_empty()) {
 		String default_name = available_terminals[0].display_name;
 		_add_terminal_tab(default_name, available_terminals[0]);
 	}
-	print_line("TerminalPlugin::TerminalPlugin() - Terminal plugin initialization complete");
 }
 
 void TerminalPlugin::_on_copy_request(int tab_index) {
