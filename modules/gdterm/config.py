@@ -1,8 +1,5 @@
 def can_build(env, platform):
-    if platform == "windows":
-        # Only build on Windows with MSVC compiler
-        return not (env.get("use_mingw", False) or env.get("use_llvm", False))
-    return platform == "macos" or platform == "linuxbsd"
+    return platform == "macos" or platform == "linuxbsd" or platform == "windows"
 
 
 def configure(env):
