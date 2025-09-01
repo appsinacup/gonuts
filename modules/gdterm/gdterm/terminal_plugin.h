@@ -47,6 +47,9 @@ struct TerminalTab {
 class TerminalPlugin : public EditorPlugin {
 	GDCLASS(TerminalPlugin, EditorPlugin);
 
+private:
+	static TerminalPlugin *singleton;
+
 	MarginContainer *container;
 	HBoxContainer *hbox;
 	VScrollBar *scrollbar;
@@ -96,6 +99,19 @@ public:
 	virtual String get_plugin_name() const override { return "Terminal"; }
 	bool has_main_screen() const override { return false; }
 	virtual void make_visible(bool p_visible) override;
+
+	// Public methods for tab management and command execution
+	int add_terminal_tab(const String &p_name = "Terminal", const String &p_shell_path = "");
+	bool run_command_in_tab(int tab_index, const String &command);
+	bool run_command_in_current_tab(const String &command);
+	int get_current_tab_index() const { return active_tab; }
+	int get_tab_count() const { return terminal_tabs.size(); }
+	String get_tab_name(int tab_index) const;
+	bool set_current_tab(int tab_index);
+	bool close_tab(int tab_index);
+
+	// Singleton access
+	static TerminalPlugin *get_singleton() { return singleton; }
 
 	TerminalPlugin();
 	~TerminalPlugin();

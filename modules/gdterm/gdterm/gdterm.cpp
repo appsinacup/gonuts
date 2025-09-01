@@ -1794,9 +1794,7 @@ void GDTerm::_do_resize() {
 	float font_ascent = font->get_ascent(font_size);
 	float available_height_for_lines = size.y - font_ascent;
 	int num_rows = available_height_for_lines / font_height;
-	if (num_rows < 24) {
-		num_rows = 24;
-	}
+
 
 	Vector2 minimum_size = _font_space_size * 2;
 	if (_min_size != minimum_size) {

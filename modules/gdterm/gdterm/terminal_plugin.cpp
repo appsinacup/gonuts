@@ -16,6 +16,9 @@
 #include "scene/gui/tab_container.h"
 #include "servers/display_server.h"
 
+// Singleton definition
+TerminalPlugin *TerminalPlugin::singleton = nullptr;
+
 void TerminalPlugin::_notification(int p_what) {
 	switch (p_what) {
 		case NOTIFICATION_ENTER_TREE: {
@@ -262,6 +265,16 @@ void TerminalPlugin::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("_on_tab_close_pressed", "tab"), &TerminalPlugin::_on_tab_close_pressed);
 	ClassDB::bind_method(D_METHOD("_update_terminal_theme"), &TerminalPlugin::_update_terminal_theme);
 	ClassDB::bind_method(D_METHOD("_update_size_label"), &TerminalPlugin::_update_size_label);
+
+	// Public API methods
+	ClassDB::bind_method(D_METHOD("add_terminal_tab", "name", "shell_path"), &TerminalPlugin::add_terminal_tab, DEFVAL("Terminal"), DEFVAL(""));
+	ClassDB::bind_method(D_METHOD("run_command_in_tab", "tab_index", "command"), &TerminalPlugin::run_command_in_tab);
+	ClassDB::bind_method(D_METHOD("run_command_in_current_tab", "command"), &TerminalPlugin::run_command_in_current_tab);
+	ClassDB::bind_method(D_METHOD("get_current_tab_index"), &TerminalPlugin::get_current_tab_index);
+	ClassDB::bind_method(D_METHOD("get_tab_count"), &TerminalPlugin::get_tab_count);
+	ClassDB::bind_method(D_METHOD("get_tab_name", "tab_index"), &TerminalPlugin::get_tab_name);
+	ClassDB::bind_method(D_METHOD("set_current_tab", "tab_index"), &TerminalPlugin::set_current_tab);
+	ClassDB::bind_method(D_METHOD("close_tab", "tab_index"), &TerminalPlugin::close_tab);
 }
 
 void TerminalPlugin::make_visible(bool p_visible) {
@@ -393,12 +406,16 @@ void TerminalPlugin::_add_terminal_tab(const String &p_name, const TerminalType 
 }
 
 TerminalPlugin::TerminalPlugin() {
+	print_line("TerminalPlugin::TerminalPlugin() - Creating terminal plugin");
+	singleton = this;
+	print_line("TerminalPlugin::TerminalPlugin() - Singleton set");
 	_create_ui();
 
 	if (!available_terminals.is_empty()) {
 		String default_name = available_terminals[0].display_name;
 		_add_terminal_tab(default_name, available_terminals[0]);
 	}
+	print_line("TerminalPlugin::TerminalPlugin() - Terminal plugin initialization complete");
 }
 
 void TerminalPlugin::_on_copy_request(int tab_index) {
@@ -465,6 +482,73 @@ void TerminalPlugin::_gui_input(const Ref<InputEvent> &p_event) {
 		}
 	}
 }
+
+// Public methods for tab management and command execution
+
+int TerminalPlugin::add_terminal_tab(const String &p_name, const String &p_shell_path) {
+	String tab_name = p_name.is_empty() ? "Terminal" : p_name;
+
+	TerminalType terminal_type;
+	if (!p_shell_path.is_empty()) {
+		terminal_type = TerminalType(tab_name, p_shell_path);
+	} else if (!available_terminals.is_empty()) {
+		terminal_type = available_terminals[0];
+	} else {
+		// Fallback to default shell
+		terminal_type = TerminalType(tab_name, "/bin/bash");
+	}
+
+	_add_terminal_tab(tab_name, terminal_type);
+	return terminal_tabs.size() - 1;
+}
+
+bool TerminalPlugin::run_command_in_tab(int tab_index, const String &command) {
+	if (tab_index < 0 || tab_index >= terminal_tabs.size()) {
+		return false;
+	}
+
+	TerminalTab &tab = terminal_tabs.write[tab_index];
+	if (!tab.terminal) {
+		return false;
+	}
+
+	// Send the command followed by Enter
+	tab.terminal->send_input(command + "\n");
+	return true;
+}
+
+bool TerminalPlugin::run_command_in_current_tab(const String &command) {
+	return run_command_in_tab(active_tab, command);
+}
+
+String TerminalPlugin::get_tab_name(int tab_index) const {
+	if (tab_index < 0 || tab_index >= terminal_tabs.size()) {
+		return "";
+	}
+	return terminal_tabs[tab_index].name;
+}
+
+bool TerminalPlugin::set_current_tab(int tab_index) {
+	if (tab_index < 0 || tab_index >= terminal_tabs.size() || !tab_container) {
+		return false;
+	}
+
+	tab_container->set_current_tab(tab_index);
+	active_tab = tab_index;
+	_update_scrollbar(tab_index);
+	_update_size_label();
+	return true;
+}
+
+bool TerminalPlugin::close_tab(int tab_index) {
+	if (tab_index < 0 || tab_index >= terminal_tabs.size()) {
+		return false;
+	}
+
+	_close_terminal_tab(tab_index);
+	return true;
+}
+
 TerminalPlugin::~TerminalPlugin() {
 	for (int i = 0; i < terminal_tabs.size(); i++) {
 		if (terminal_tabs[i].terminal) {
@@ -482,6 +566,8 @@ TerminalPlugin::~TerminalPlugin() {
 		EditorNode::get_bottom_panel()->remove_item(container);
 		memdelete(container);
 	}
+
+	singleton = nullptr;
 }
 
 #endif // TOOLS_ENABLED

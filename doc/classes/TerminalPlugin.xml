@@ -23,4 +23,62 @@
 	</description>
 	<tutorials>
 	</tutorials>
+	<methods>
+		<method name="add_terminal_tab">
+			<return type="int" />
+			<param index="0" name="name" type="String" default="&quot;Terminal&quot;" />
+			<param index="1" name="shell_path" type="String" default="&quot;&quot;" />
+			<description>
+				Add a terminal tab with the given name and optional shell path. If shell_path is empty, the default shell will be used.
+			</description>
+		</method>
+		<method name="close_tab">
+			<return type="bool" />
+			<param index="0" name="tab_index" type="int" />
+			<description>
+				Close the terminal tab at the given index. Returns true if successful, false if the index is invalid.
+			</description>
+		</method>
+		<method name="get_current_tab_index" qualifiers="const">
+			<return type="int" />
+			<description>
+				Get the index of the currently active terminal tab.
+			</description>
+		</method>
+		<method name="get_tab_count" qualifiers="const">
+			<return type="int" />
+			<description>
+				Get the total number of open terminal tabs.
+			</description>
+		</method>
+		<method name="get_tab_name" qualifiers="const">
+			<return type="String" />
+			<param index="0" name="tab_index" type="int" />
+			<description>
+				Get the name of the terminal tab at the given index.
+			</description>
+		</method>
+		<method name="run_command_in_current_tab">
+			<return type="bool" />
+			<param index="0" name="command" type="String" />
+			<description>
+				Run the given command in the currently active terminal tab.
+			</description>
+		</method>
+		<method name="run_command_in_tab">
+			<return type="bool" />
+			<param index="0" name="tab_index" type="int" />
+			<param index="1" name="command" type="String" />
+			<description>
+				Run the given command in the terminal tab at the specified index.
+			</description>
+		</method>
+		<method name="set_current_tab">
+			<return type="bool" />
+			<param index="0" name="tab_index" type="int" />
+			<description>
+				Set the currently active terminal tab to the one at the specified index.
+			</description>
+		</method>
+	</methods>
 </class>
