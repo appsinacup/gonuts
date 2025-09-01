@@ -164,6 +164,14 @@ void TerminalPlugin::_on_tab_close_pressed(int p_tab) {
 	_close_terminal_tab(p_tab);
 }
 
+void TerminalPlugin::_on_tab_reorder(int p_tab_index) {
+	// The active_tab_rearranged signal is called after the tab has been moved
+	// We need to update our active_tab index to match the new position
+	active_tab = p_tab_index;
+	_update_scrollbar(active_tab);
+	_update_size_label();
+}
+
 void TerminalPlugin::_detect_available_terminals() {
 	available_terminals.clear();
 
@@ -263,6 +271,7 @@ void TerminalPlugin::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("_on_tab_changed", "tab"), &TerminalPlugin::_on_tab_changed);
 	ClassDB::bind_method(D_METHOD("_on_add_terminal_pressed"), &TerminalPlugin::_on_add_terminal_pressed);
 	ClassDB::bind_method(D_METHOD("_on_tab_close_pressed", "tab"), &TerminalPlugin::_on_tab_close_pressed);
+	ClassDB::bind_method(D_METHOD("_on_tab_reorder", "tab_index"), &TerminalPlugin::_on_tab_reorder);
 	ClassDB::bind_method(D_METHOD("_update_terminal_theme"), &TerminalPlugin::_update_terminal_theme);
 	ClassDB::bind_method(D_METHOD("_update_size_label"), &TerminalPlugin::_update_size_label);
 
@@ -275,6 +284,7 @@ void TerminalPlugin::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_tab_name", "tab_index"), &TerminalPlugin::get_tab_name);
 	ClassDB::bind_method(D_METHOD("set_current_tab", "tab_index"), &TerminalPlugin::set_current_tab);
 	ClassDB::bind_method(D_METHOD("close_tab", "tab_index"), &TerminalPlugin::close_tab);
+	ClassDB::bind_method(D_METHOD("move_tab", "from_index", "to_index"), &TerminalPlugin::move_tab);
 }
 
 void TerminalPlugin::make_visible(bool p_visible) {
@@ -306,7 +316,9 @@ void TerminalPlugin::_create_ui() {
 	TabBar *tab_bar = tab_container->get_tab_bar();
 	if (tab_bar) {
 		tab_bar->set_tab_close_display_policy(TabBar::CLOSE_BUTTON_SHOW_ACTIVE_ONLY);
+		tab_bar->set_drag_to_rearrange_enabled(true);
 		tab_bar->connect("tab_close_pressed", callable_mp(this, &TerminalPlugin::_on_tab_close_pressed));
+		tab_bar->connect("active_tab_rearranged", callable_mp(this, &TerminalPlugin::_on_tab_reorder));
 	}
 
 	main_vbox->add_child(toolbar_hbox);
@@ -543,6 +555,35 @@ bool TerminalPlugin::close_tab(int tab_index) {
 	}
 
 	_close_terminal_tab(tab_index);
+	return true;
+}
+
+bool TerminalPlugin::move_tab(int from_index, int to_index) {
+	if (from_index == to_index || from_index < 0 || from_index >= terminal_tabs.size() ||
+	    to_index < 0 || to_index >= terminal_tabs.size() || !tab_container) {
+		return false;
+	}
+
+	// Move the terminal tab data in our internal array
+	TerminalTab tab_to_move = terminal_tabs[from_index];
+	terminal_tabs.remove_at(from_index);
+	terminal_tabs.insert(to_index, tab_to_move);
+
+	// Move the tab in the UI
+	tab_container->move_child(tab_container->get_child(from_index), to_index);
+
+	// Update active tab index if needed
+	if (active_tab == from_index) {
+		active_tab = to_index;
+	} else if (from_index < active_tab && to_index >= active_tab) {
+		active_tab--;
+	} else if (from_index > active_tab && to_index <= active_tab) {
+		active_tab++;
+	}
+
+	_update_scrollbar(active_tab);
+	_update_size_label();
+
 	return true;
 }
 

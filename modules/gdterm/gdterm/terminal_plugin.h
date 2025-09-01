@@ -77,6 +77,7 @@ private:
 	void _on_tab_close_pressed(int p_tab);
 	void _on_copy_request(int tab_index);
 	void _on_paste_request(int tab_index);
+	void _on_tab_reorder(int p_tab_index);
 
 	virtual void _gui_input(const Ref<InputEvent> &p_event);
 
@@ -109,6 +110,7 @@ public:
 	String get_tab_name(int tab_index) const;
 	bool set_current_tab(int tab_index);
 	bool close_tab(int tab_index);
+	bool move_tab(int from_index, int to_index);
 
 	// Singleton access
 	static TerminalPlugin *get_singleton() { return singleton; }

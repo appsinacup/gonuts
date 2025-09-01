@@ -151,6 +151,11 @@ void GodotIDEPlugin::_update_url_from_settings() {
 
 void GodotIDEPlugin::_start_code_tunnel() {
 #ifdef TOOLS_ENABLED
+	// Only start tunnel once
+	if (tunnel_started) {
+		return;
+	}
+
 	// Get the terminal plugin singleton
 	TerminalPlugin *terminal_plugin = TerminalPlugin::get_singleton();
 
@@ -159,11 +164,26 @@ void GodotIDEPlugin::_start_code_tunnel() {
 		return;
 	}
 
-	terminal_plugin->add_terminal_tab("VSCode Tunnel");
+	// Check if there's already a VSCode Tunnel tab
+	for (int i = 0; i < terminal_plugin->get_tab_count(); i++) {
+		String tab_name = terminal_plugin->get_tab_name(i);
+		if (tab_name.contains("VSCode") || tab_name.contains("Tunnel")) {
+			// Already exists, just run the command in this tab
+			bool success = terminal_plugin->run_command_in_tab(i, "code tunnel");
+			if (success) {
+				tunnel_started = true;
+			}
+			return;
+		}
+	}
 
-	bool success = terminal_plugin->run_command_in_tab(1, "code tunnel");
+	// Create a new tab and run the command
+	int tab_index = terminal_plugin->add_terminal_tab("VSCode Tunnel");
+	bool success = terminal_plugin->run_command_in_tab(tab_index, "code tunnel");
 
-	if (!success) {
+	if (success) {
+		tunnel_started = true;
+	} else {
 		ERR_PRINT("Failed to run VS Code tunnel command in terminal");
 	}
 #else
