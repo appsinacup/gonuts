@@ -3,9 +3,12 @@
 #include "../../pty_proxy.h"
 
 #define WIN32_LEAN_AND_MEAN
+#ifndef NTDDI_VERSION
+#define NTDDI_VERSION 0x0A000006 // NTDDI_WIN10_RS5
+#endif
 #ifndef _WIN32_WINNT
-#define _WIN32_WINNT 0x0A00
-#endif // _WIN32_WINNT
+#define _WIN32_WINNT 0x0A00 // _WIN32_WINNT_WIN10
+#endif
 #ifndef NOMINMAX
 #define NOMINMAX
 #endif
@@ -17,6 +20,19 @@
 #include <mutex>
 #ifdef __MINGW64__
 #include <cstring>
+// Add missing pseudo-console API definitions for MinGW
+#ifndef HPCON
+typedef VOID* HPCON;
+#endif
+#ifndef PROC_THREAD_ATTRIBUTE_PSEUDOCONSOLE
+#define PROC_THREAD_ATTRIBUTE_PSEUDOCONSOLE 0x00020016
+#endif
+// Function declarations for pseudo-console API
+extern "C" {
+HRESULT WINAPI CreatePseudoConsole(COORD size, HANDLE hInput, HANDLE hOutput, DWORD dwFlags, HPCON* phPC);
+HRESULT WINAPI ResizePseudoConsole(HPCON hPC, COORD size);
+void WINAPI ClosePseudoConsole(HPCON hPC);
+}
 #endif
 
 static const int TO_BUFFER_MAX_SIZE = 1024;
