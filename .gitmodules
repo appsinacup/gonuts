@@ -7,3 +7,6 @@
 [submodule "modules/gdterm"]
 	path = modules/gdterm
 	url = https://github.com/appsinacup/gdterm.git
+[submodule "modules/godot_vscode_ide"]
+	path = modules/godot_vscode_ide
+	url = https://github.com/appsinacup/godot_vscode_ide.git
