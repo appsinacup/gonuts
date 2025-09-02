@@ -17,8 +17,10 @@
 
 - **Steam**: using GodotSteam.
 - **Discord Embedded App**
-- **Terminal**: using gdterm.
-- **tiny_lobby**: Multiplayer server client.
+- **Terminal**: using [appsinacup/gdterm](https://github.com/appsinacup/gdterm) - fork of gdterm.
+- **tiny_lobby**: Multiplayer server client using [appsinacup/tiny_lobby].
+- **Webview**: using [appsinacup/godot_wry](https://github.com/appsinacup/godot_wry) - fork of godot_wry
+- **VSCode IDE**: using [appsinacup/godot_vscode_ide](https://github.com/appsinacup/godot_vscode_ide)
 
 ## Getting the engine
 
