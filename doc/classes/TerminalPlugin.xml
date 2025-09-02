@@ -58,6 +58,14 @@
 				Get the name of the terminal tab at the given index.
 			</description>
 		</method>
++		<method name="move_tab">
++			<return type="bool" />
++			<param index="0" name="from_index" type="int" />
++			<param index="1" name="to_index" type="int" />
++			<description>
++				Move the terminal tab from one index to another.
++			</description>
++		</method>
 		<method name="run_command_in_current_tab">
 			<return type="bool" />
 			<param index="0" name="command" type="String" />
