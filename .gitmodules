@@ -10,6 +10,3 @@
 [submodule "modules/godot_vscode_ide"]
 	path = modules/godot_vscode_ide
 	url = https://github.com/appsinacup/godot_vscode_ide.git
-[submodule "modules/godot_webview"]
-	path = modules/godot_webview
-	url = https://github.com/appsinacup/godot_webview.git
