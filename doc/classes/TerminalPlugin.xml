@@ -58,6 +58,13 @@
 				Get the name of the terminal tab at the given index.
 			</description>
 		</method>
+		<method name="get_terminal" qualifiers="const">
+			<return type="GDTerm" />
+			<param index="0" name="tab_index" type="int" />
+			<description>
+				Get the GDTerm instance for the terminal tab at the specified index.
+			</description>
+		</method>
 		<method name="move_tab">
 			<return type="bool" />
 			<param index="0" name="from_index" type="int" />
