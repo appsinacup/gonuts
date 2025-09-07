@@ -15,12 +15,25 @@
 
 ## Features
 
-- **Steam**: using fork of GodotSteam.
-- **Discord Embedded App**
-- **Terminal**: using [appsinacup/gdterm](https://github.com/appsinacup/gdterm) - fork of gdterm.
-- **tiny_lobby**: Multiplayer server client using [appsinacup/tiny_lobby].
-- **Webview**: using [appsinacup/godot_wry](https://github.com/appsinacup/godot_wry) - fork of godot_wry
-- **VSCode IDE**: using [appsinacup/godot_vscode_ide](https://github.com/appsinacup/godot_vscode_ide)
+- **Steam**: fork of GodotSteam. Integrate your game with Steam directly.
+- **Discord Embedded App**: Support for discord embedded apps.
+- **Terminal**: using [appsinacup/gdterm](https://github.com/appsinacup/gdterm) - fork of gdterm. Adds a Terminal tab:
+
+![terminal tab](./modules/gdterm/docs/terminal_tab.png)
+
+- **tiny_lobby**: Multiplayer server client using [appsinacup/tiny_lobby](https://github.com/appsinacup/tiny_lobby).
+- **Webview**: using [appsinacup/godot_wry](https://github.com/appsinacup/godot_wry) - fork of godot_wry that makes it module.
+- **Embedded VSCode**: using [appsinacup/godot_vscode_ide](https://github.com/appsinacup/godot_vscode_ide)
+
+![vscode](./modules/godot_vscode_ide/docs/example.png)
+
+## Build locally
+
+After you clone the repo, make sure to also get the submodules:
+
+```sh
+
+```
 
 ## Getting the engine
 
