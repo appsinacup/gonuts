@@ -19,13 +19,13 @@
 - **Discord Embedded App**: Support for discord embedded apps.
 - **Terminal**: using [appsinacup/gdterm](https://github.com/appsinacup/gdterm) - fork of gdterm. Adds a Terminal tab:
 
-![terminal tab](./modules/gdterm/docs/terminal_tab.png)
+![terminal tab](https://github.com/appsinacup/gdterm/raw/main/docs/terminal_tab.png)
 
 - **tiny_lobby**: Multiplayer server client using [appsinacup/tiny_lobby](https://github.com/appsinacup/tiny_lobby).
 - **Webview**: using [appsinacup/godot_wry](https://github.com/appsinacup/godot_wry) - fork of godot_wry that makes it module.
 - **Embedded VSCode**: using [appsinacup/godot_vscode_ide](https://github.com/appsinacup/godot_vscode_ide)
 
-![vscode](./modules/godot_vscode_ide/docs/example.png)
+![vscode](https://github.com/appsinacup/godot_vscode_ide/raw/main/docs/example.png)
 
 ## Build locally
 
