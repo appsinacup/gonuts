@@ -2,7 +2,7 @@
   <img src="logo_outlined.svg" width="400" alt="Gonuts Engine logo">
 </p>
 
-|[Website](https://appsinacup.com)|[Discord](https://discord.gg/56dMud8HYn)
+|[Website](https://appsinacup.com/engine/)|[Discord](https://discord.gg/56dMud8HYn)
 |-|-|
 
 -----
@@ -32,10 +32,9 @@
 After you clone the repo, make sure to also get the submodules:
 
 ```sh
-
+git submodule update --init --recursive
 ```
 
 ## Getting the engine
 
-Official binaries for the Gonuts editor and the export templates can be found
-[on our Godot Builder website](https://github.com/appsinacup/action_godot_builder/releases).
+Official binaries for the Gonuts editor and the export templates can be found on [Gonuts Website](https://appsinacup.com/engine/) at the **Releases** section.
