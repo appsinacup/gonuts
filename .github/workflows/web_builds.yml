@@ -4,6 +4,7 @@ on:
 
 # Global Settings
 env:
+  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   SCONS_FLAGS: >-
     dev_mode=yes
     tests=no

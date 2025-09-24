@@ -16,6 +16,12 @@ repos:
       - id: clang-format
         files: \.(c|h|cpp|hpp|cc|hh|cxx|hxx|m|mm|inc|java)$
         types_or: [text]
+        exclude: |
+          (?x)^(
+            modules/godotsteam/.*|
+            modules/tiny_lobby/.*|
+            modules/gdterm/.*
+          )$
       - id: clang-format
         name: clang-format-glsl
         files: \.glsl$
@@ -56,6 +62,13 @@ repos:
     hooks:
       - id: codespell
         additional_dependencies: [tomli]
+        exclude: |
+          (?x)^(
+            modules/godotsteam/.*|
+            modules/tiny_lobby/.*|
+            modules/gdterm/.*|
+            .*\.svg
+          )$
 
   ### Requires Docker; look into alternative implementation.
   # - repo: https://github.com/comkieffer/pre-commit-xmllint.git
@@ -150,7 +163,10 @@ repos:
             platform/(?!android|ios|linuxbsd|macos|web|windows)\w+/.*|
             platform/android/java/lib/src/org/godotengine/godot/gl/GLSurfaceView\.java|
             platform/android/java/lib/src/org/godotengine/godot/gl/EGLLogWrapper\.java|
-            platform/android/java/lib/src/org/godotengine/godot/utils/ProcessPhoenix\.java
+            platform/android/java/lib/src/org/godotengine/godot/utils/ProcessPhoenix\.java|
+            modules/godotsteam/.*|
+            modules/tiny_lobby/.*|
+            modules/gdterm/.*
           )$
 
       - id: header-guards
