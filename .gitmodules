@@ -1,21 +1,28 @@
 [submodule "modules/tiny_lobby"]
 	path = modules/tiny_lobby
+	branch = main
 	url = https://github.com/appsinacup/addon_tiny_lobby_client
 [submodule "modules/godot_wry"]
 	path = modules/godot_wry
+	branch = main
 	url = https://github.com/appsinacup/godot_wry.git
 [submodule "modules/gdterm"]
 	path = modules/gdterm
+	branch = main
 	url = https://github.com/appsinacup/gdterm.git
 [submodule "modules/godot_vscode_ide"]
 	path = modules/godot_vscode_ide
+	branch = main
 	url = https://github.com/appsinacup/godot_vscode_ide.git
 [submodule "modules/godotsteam"]
 	path = modules/godotsteam
+	branch = main
 	url = https://github.com/appsinacup/godotsteam.git
 [submodule "modules/rapier_2d"]
 	path = modules/rapier_2d
+	branch = main
 	url = https://github.com/appsinacup/godot-rapier-physics-module-2d.git
 [submodule "modules/rapier_3d"]
 	path = modules/rapier_3d
+	branch = main
 	url = https://github.com/appsinacup/godot-rapier-physics-module-3d.git
